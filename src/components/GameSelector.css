@@ -1,0 +1,112 @@
+.game-selector {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.game-selector-label {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.game-selector-loading,
+.game-selector-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 14px;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #e65100;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.game-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.game-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.game-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.game-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.game-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  color: inherit;
+  font-family: inherit;
+}
+
+.game-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.game-item.selected {
+  background: rgba(230, 81, 0, 0.15);
+  border-color: rgba(230, 81, 0, 0.4);
+}
+
+.game-date {
+  font-size: 12px;
+  color: #888;
+  min-width: 70px;
+}
+
+.game-matchup {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.game-location {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.game-opponent {
+  font-weight: 600;
+  color: #fff;
+}
+
+
