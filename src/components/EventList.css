@@ -156,6 +156,15 @@
   transform: scale(1.1);
 }
 
+/* Jump buttons (smaller than prev/next) */
+.nav-button.jump-start,
+.nav-button.jump-end {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+}
+
+
 /* Fullscreen styles */
 .event-list-container:fullscreen {
   background: #000;

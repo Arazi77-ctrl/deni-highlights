@@ -139,29 +139,20 @@ export async function getVideoEvents(gameId: string, contextMeasure: ContextMeas
   }
 }
 
-// Fetch all video events for a game
-export async function getAllVideoEvents(gameId: string): Promise<Map<ContextMeasure, PlayEvent[]>> {
-  // Use correct NBA API context measures:
-  // - TOV (not TO) for turnovers
-  // - REB for rebounds
-  // - FTA removed (NBA doesn't provide video clips for free throws)
-  const measures: ContextMeasure[] = ['FGA', 'AST', 'TOV', 'REB', 'BLK', 'STL', 'PF'];
-  const results = new Map<ContextMeasure, PlayEvent[]>();
-
-  // Fetch all in parallel
-  const promises = measures.map(async (measure) => {
-    const events = await getVideoEvents(gameId, measure);
-    return { measure, events };
-  });
-
-  const allResults = await Promise.all(promises);
-  allResults.forEach(({ measure, events }) => {
-    results.set(measure, events);
-  });
-
-  return results;
+// Fetch all video events for a game (Deni's full game + clutch time for all players)
+// Server handles deduplication and sorting
+export async function getAllVideoEvents(gameId: string): Promise<PlayEvent[]> {
+  try {
+    const response = await axios.get(`${API_BASE}/videos/all`, {
+      params: { gameId }
+    });
+    return response.data.events || [];
+  } catch (error) {
+    console.error('Failed to fetch all video events:', error);
+    return [];
+  }
 }
 
 // Legacy exports for compatibility
 export const getPlayerEvents = getVideoEvents;
-export const getAllPlayerEvents = getAllVideoEvents;
+export const getAllPlayerEvents = getAllVideoEvents; // Note: now returns PlayEvent[] instead of Map

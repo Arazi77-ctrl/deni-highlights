@@ -55,28 +55,37 @@ export function EventList({ events, loading }: EventListProps) {
     };
   }, []);
 
-  // Show controls initially then start hide timer
-  useEffect(() => {
-    showControls();
-  }, [showControls]);
 
   const handleVideoEnded = () => {
-    // Auto-advance to next video
+    // Auto-advance to next video, hide controls
     if (currentIndex < events.length - 1) {
+      setControlsVisible(false);
       setCurrentIndex(currentIndex + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
+      setControlsVisible(false);
       setCurrentIndex(currentIndex - 1);
     }
   };
 
   const handleNext = () => {
     if (currentIndex < events.length - 1) {
+      setControlsVisible(false);
       setCurrentIndex(currentIndex + 1);
     }
+  };
+
+  const jumpToStart = () => {
+    setControlsVisible(false);
+    setCurrentIndex(0);
+  };
+
+  const jumpToEnd = () => {
+    setControlsVisible(false);
+    setCurrentIndex(events.length - 1);
   };
 
   const handleMouseMove = () => {
@@ -84,15 +93,14 @@ export function EventList({ events, loading }: EventListProps) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    showControls();
-    
-    // Arrow key navigation
+    // Arrow key navigation (don't show controls, they'll be hidden)
     if (e.key === 'ArrowLeft') {
       handlePrev();
     } else if (e.key === 'ArrowRight') {
       handleNext();
     } else if (e.key === ' ') {
       e.preventDefault();
+      showControls();
       if (videoRef.current) {
         if (videoRef.current.paused) {
           videoRef.current.play();
@@ -100,12 +108,14 @@ export function EventList({ events, loading }: EventListProps) {
           videoRef.current.pause();
         }
       }
+    } else {
+      showControls();
     }
   };
 
   const handlePlay = () => {
     setIsPlaying(true);
-    showControls();
+    // Don't show controls here - let them stay hidden during auto-play
   };
 
   const handlePause = () => {
@@ -185,6 +195,16 @@ export function EventList({ events, loading }: EventListProps) {
             {/* Custom Controls Overlay */}
             <div className="custom-controls">
               <button 
+                className="nav-button jump-start"
+                onClick={(e) => { e.stopPropagation(); jumpToStart(); }}
+                disabled={currentIndex === 0}
+                aria-label="Jump to start"
+                title="Jump to first video"
+              >
+                ⏮
+              </button>
+              
+              <button 
                 className="nav-button prev"
                 onClick={(e) => { e.stopPropagation(); handlePrev(); }}
                 disabled={currentIndex === 0}
@@ -208,6 +228,16 @@ export function EventList({ events, loading }: EventListProps) {
                 aria-label="Next video"
               >
                 ›
+              </button>
+              
+              <button 
+                className="nav-button jump-end"
+                onClick={(e) => { e.stopPropagation(); jumpToEnd(); }}
+                disabled={currentIndex === events.length - 1}
+                aria-label="Jump to end"
+                title="Jump to last video (clutch time)"
+              >
+                ⏭
               </button>
               
               <button 

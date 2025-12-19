@@ -31,21 +31,12 @@ function App() {
   }, []);
 
   // Load events when game changes
+  // Server returns Deni's full game + clutch time videos, already deduplicated and sorted
   const loadGameData = useCallback(async (gameId: string) => {
     setLoading(true);
     
     try {
-      const videoEventsMap = await getAllVideoEvents(gameId);
-      
-      // Combine all events from all categories into a single array
-      const allEvents: PlayEvent[] = [];
-      videoEventsMap.forEach((eventList) => {
-        allEvents.push(...eventList);
-      });
-      
-      // Sort by eventId for chronological order
-      allEvents.sort((a, b) => a.eventId - b.eventId);
-      
+      const allEvents = await getAllVideoEvents(gameId);
       setEvents(allEvents);
     } catch (error) {
       console.error('Failed to load game data:', error);
@@ -104,13 +95,13 @@ function App() {
               />
             </section>
           )}
-        </div>
+      </div>
       </main>
 
       <footer className="app-footer">
         <p>Data provided by NBA Stats API • Videos © NBA</p>
       </footer>
-    </div>
+      </div>
   );
 }
 
