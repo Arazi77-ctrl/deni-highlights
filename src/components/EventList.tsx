@@ -123,6 +123,16 @@ export function EventList({ events, loading }: EventListProps) {
     }
   };
 
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+    
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      containerRef.current.requestFullscreen();
+    }
+  };
+
   const currentEvent = events[currentIndex];
 
   if (loading) {
@@ -198,6 +208,14 @@ export function EventList({ events, loading }: EventListProps) {
                 aria-label="Next video"
               >
                 ›
+              </button>
+              
+              <button 
+                className="fullscreen-btn"
+                onClick={(e) => { e.stopPropagation(); toggleFullscreen(); }}
+                aria-label="Toggle fullscreen"
+              >
+                ⛶
               </button>
             </div>
           </>
